@@ -1,6 +1,10 @@
 package base;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class Grid {
 
@@ -36,17 +40,109 @@ public class Grid {
 	}
 	
 	/**
-	 * Returns the cell in supplied coordinates
-	 * @param coordX X coordinate
-	 * @param coordY Y coordinate
-	 * @return Cell in coordinates
+	 * Calculates and returns next generation grid
+	 * @return Next generation grid
 	 */
-	public Cell getCell(int coordX, int coordY)
+	public void nextGeneration()
 	{
-		return this.current
-					.stream()
-					.filter(x -> x.getX() == coordX && x.getY() == coordY)
-					.findFirst()
-					.orElseThrow(() -> new IllegalArgumentException("Cell doesn't exist"));
+		ArrayList<Cell> result = new ArrayList<>();
+		
+		this.current
+			.stream()
+			.forEach(x -> {
+				result.add(applySurvivingRules(x.clone()));
+			});
+		
+		this.current = result;
+	}	
+
+	/**
+	 * Kills cell in selected coordinates
+	 * @param coordX Cell's X coordinate
+	 * @param coordY Cell's Y coordinate
+	 */
+	public void killCell(int coordX, int coordY)
+	{
+		Optional<Cell> cell = this.current
+									.stream()
+									.filter(x -> x.getX() == coordX && x.getY() == coordY)
+									.findFirst();
+		
+		cell.ifPresent(x -> x.kill());
 	}
+	
+	/**
+	 * Revives cell in selected coordinates
+	 * @param coordX Cell's X coordinate
+	 * @param coordY Cell's Y coordinate
+	 */
+	public void reviveCell(int coordX, int coordY)
+	{
+		Optional<Cell> cell = this.current
+									.stream()
+									.filter(x -> x.getX() == coordX && x.getY() == coordY)
+									.findFirst();
+		
+		cell.ifPresent(x -> x.revive());
+	}
+	
+	/**
+	 * Overriden version of toString
+	 */
+	@Override
+	public String toString()
+	{
+		StringBuilder resp = new StringBuilder();
+		int filaActual = 1;
+		
+		List<Cell> currentGrid = this.current
+									.stream()
+									.sorted()
+									.collect(Collectors.toList());
+		
+		Iterator<Cell> gridIterator = currentGrid.iterator();		
+		
+		while(gridIterator.hasNext())
+		{
+			Cell celda = gridIterator.next();
+			if (celda.getX() != filaActual)
+			{
+				resp.append("\n");
+				filaActual = celda.getX();
+			}
+			
+			// resp.append("(" + celda.getX() + "," + celda.getY() + ")");
+			resp.append(celda);				
+		}
+			
+		return resp.toString();
+	}
+	
+	/**
+	 * Applies surviving rules to the cell passed as parameter
+	 * @param cell The cell to kill or revive
+	 * @return Cell with updated status
+	 */
+	private Cell applySurvivingRules(Cell cell)
+	{
+		int neighbors = (int)this.current
+				.stream()
+				.filter(x -> x.isAlive() && cell.isNeighbor(x))
+				.count();
+		
+		if (cell.isAlive())
+		{
+			if (neighbors < 2 || neighbors > 3)
+			{
+				cell.kill();
+			}
+		}
+		else if (cell.isDead() && neighbors == 3)
+		{
+			cell.revive();
+		}
+		
+		return cell;
+	}
+	
 }

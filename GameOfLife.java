@@ -1,3 +1,5 @@
+import base.Grid;
+
 /**
  * Main class of Conway's Game Of Life
  * 
@@ -19,8 +21,17 @@
 public class GameOfLife {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
+		
+		Grid juego = new Grid(5,5);
+		
+		juego.reviveCell(1, 3);
+		juego.reviveCell(2, 3);
+		juego.reviveCell(3, 3);
+		System.out.println(juego + "\n");
+		juego.nextGeneration();
+		System.out.println(juego + "\n");
+		juego.nextGeneration();
+		System.out.println(juego + "\n");
 	}
 
 }

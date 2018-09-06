@@ -6,7 +6,7 @@ package base;
  * @author Ramón Carrasco Muñoz
  *
  */
-public class Cell {
+public class Cell implements Comparable<Cell> {
 	
 	/**
 	 * Alive cell marker
@@ -144,6 +144,44 @@ public class Cell {
 	public int hashCode() {		
 		int res = (((this.coordX + this.coordY) * (this.coordX + this.coordY + 1)) / 2) + this.coordY;
 		return res;
+	}
+	
+	/**
+	 * Clones current cell to a new one with same state
+	 */
+	public Cell clone() {
+		return new Cell(alive, coordX, coordY);
+	}
+
+	/**
+	 * Compares two cells
+	 */
+	@Override
+	public int compareTo(Cell other) {
+		if (this.coordX < other.coordX)
+		{
+			return -1;
+		}
+		else if (this.coordX > other.coordX)
+		{
+			return +1;
+		}
+		else if (this.coordX == other.coordX)
+		{
+			if (this.coordY < other.coordY)
+			{
+				return -1;
+			}
+			else if (this.coordY > other.coordY)
+			{
+				return +1;
+			}
+			else
+			{
+				return 0;
+			}
+		}
+		return 0;
 	}
 
 }
