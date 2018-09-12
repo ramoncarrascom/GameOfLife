@@ -4,12 +4,27 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 public class Grid {
 
+	/**
+	 * Grid's max positions
+	 */
 	private int maxX, maxY;
+	
+	/**
+	 * Current grid contents
+	 */
 	private ArrayList<Cell> current;
+	
+	/**
+	 * Current grid generation
+	 */
+	private int generation;
+	
+	//-------------------------------- CONSTRUCTORS
 	
 	/**
 	 * Grid constructor. Initializes the current grid.
@@ -19,13 +34,67 @@ public class Grid {
 	public Grid(int maxX, int maxY)
 	{
 		if (maxX <= 0 || maxY <= 0)
-			throw new IllegalArgumentException("Grid's dimensions must be positive");
+			throw new IllegalArgumentException("Please think positive!");
 		
 		this.maxX = maxX;
 		this.maxY = maxY;
 		
 		initialize();
 	}
+	
+	//-------------------------------- GETTERS & SETTERS
+	
+	/**
+	 * Gets current grid generation
+	 * @return Current generation
+	 */
+	public int getGeneration() {
+		return generation;
+	}
+	
+	/**
+	 * Gets a copy of the current grid
+	 * @return Current grid contents
+	 */
+	public ArrayList<Cell> getCurrent() {
+		ArrayList<Cell> resp = new ArrayList<Cell>();
+		current.stream().forEach(x -> {
+			resp.add(x.clone());
+		});
+		return resp;
+	}
+
+	/**
+	 * Get maxX value
+	 * @return maxX value
+	 */
+	public int getMaxX() {
+		return maxX;
+	}
+
+	/**
+	 * Get maxY value
+	 * @return maxY value
+	 */
+	public int getMaxY() {
+		return maxY;
+	}
+	
+	/**
+	 * Gets the cell in specified position
+	 * @param coordX X coordinate
+	 * @param coordY Y coordinate
+	 * @return Returns the specified cell, or null if it doesn't exist
+	 */
+	public Cell getCell(int coordX, int coordY) {
+		Optional<Cell> resp = current.stream()
+									.filter(x -> x.getX() == coordX && x.getY() == coordY)
+									.findFirst();
+		return (resp.orElse(null)).clone();
+	}
+	
+	
+	//-------------------------------- GRID-RELATED
 	
 	/**
 	 * Initializes current grid with dead cells
@@ -37,6 +106,23 @@ public class Grid {
 		for(int x = 1; x <= maxX; x++)
 			for(int y = 1; y <= maxY; y++)
 				this.current.add(new Cell(x, y));
+		
+		this.generation = 0;
+	}
+	
+	/**
+	 * Initializes a random grid
+	 * @param percentage Percentage of living cells betwenn 10 and 90
+	 */
+	public void randomInitialize(int percentage) {
+		this.initialize();
+		
+		if (percentage < 10 || percentage > 90)
+			throw new IllegalArgumentException("Percentage must be an int between 10 and 90");
+		
+		for (int i = 0; i < (maxX * percentage) / 100; i++)
+			for (int j = 0; j < (maxY * percentage) / 100; j++)
+				this.switchCell(new Random().nextInt(maxX), new Random().nextInt(maxY));
 	}
 	
 	/**
@@ -54,8 +140,11 @@ public class Grid {
 			});
 		
 		this.current = result;
+		generation++;
 	}	
 
+	//-------------------------------- CELL-RELATED
+	
 	/**
 	 * Kills cell in selected coordinates
 	 * @param coordX Cell's X coordinate
@@ -87,13 +176,60 @@ public class Grid {
 	}
 	
 	/**
+	 * Switches cell status in selected coordinates
+	 * @param coordX Cell's X coordinate
+	 * @param coordY Cell's Y coordinate
+	 */
+	public void switchCell(int coordX, int coordY)
+	{
+		Optional<Cell> cell = this.current
+									.stream()
+									.filter(x -> x.getX() == coordX && x.getY() == coordY)
+									.findFirst();
+		
+		cell.ifPresent(x -> { if(x.isAlive()) x.kill(); else x.revive(); });
+	}
+	
+
+	
+	/**
+	 * Applies surviving rules to the cell passed as parameter
+	 * @param cell The cell to kill or revive
+	 * @return Cell with updated status
+	 */
+	private Cell applySurvivingRules(Cell cell)
+	{
+		int neighbours = (int)this.current
+				.stream()
+				.filter(x -> x.isAlive() && cell.isNeighbour(x))
+				.count();
+		
+		if (cell.isAlive())
+		{
+			if (neighbours < 2 || neighbours > 3)
+			{
+				cell.kill();
+			}
+		}
+		else if (cell.isDead() && neighbours == 3)
+		{
+			cell.revive();
+		}
+		
+		return cell;
+	}
+	
+	// ----------------------------------- OBJECT OVERRIDES
+	
+	/**
 	 * Overriden version of toString
 	 */
 	@Override
 	public String toString()
 	{
 		StringBuilder resp = new StringBuilder();
-		int filaActual = 1;
+		resp.append(generation);
+		int filaActual = -1;
 		
 		List<Cell> currentGrid = this.current
 									.stream()
@@ -116,33 +252,6 @@ public class Grid {
 		}
 			
 		return resp.toString();
-	}
-	
-	/**
-	 * Applies surviving rules to the cell passed as parameter
-	 * @param cell The cell to kill or revive
-	 * @return Cell with updated status
-	 */
-	private Cell applySurvivingRules(Cell cell)
-	{
-		int neighbors = (int)this.current
-				.stream()
-				.filter(x -> x.isAlive() && cell.isNeighbor(x))
-				.count();
-		
-		if (cell.isAlive())
-		{
-			if (neighbors < 2 || neighbors > 3)
-			{
-				cell.kill();
-			}
-		}
-		else if (cell.isDead() && neighbors == 3)
-		{
-			cell.revive();
-		}
-		
-		return cell;
 	}
 	
 }

@@ -68,33 +68,33 @@ class CellTest {
 	}
 
 	@Test
-	void TwoCellsAreNeighborsIfTheyDifferOneCoordinate() {
+	void TwoCellsAreNeighboursIfTheyDifferOneCoordinate() {
 		Cell orig = new Cell(5, 5);
-		assertTrue("Two cells are neighbors if they differ one position", orig.isNeighbor(new Cell(4, 4)));
-		assertTrue("Two cells are neighbors if they differ one position", orig.isNeighbor(new Cell(4, 5)));
-		assertTrue("Two cells are neighbors if they differ one position", orig.isNeighbor(new Cell(4, 6)));
-		assertTrue("Two cells are neighbors if they differ one position", orig.isNeighbor(new Cell(5, 4)));
-		assertTrue("Two cells are neighbors if they differ one position", orig.isNeighbor(new Cell(5, 6)));
-		assertTrue("Two cells are neighbors if they differ one position", orig.isNeighbor(new Cell(6, 4)));
-		assertTrue("Two cells are neighbors if they differ one position", orig.isNeighbor(new Cell(6, 5)));
-		assertTrue("Two cells are neighbors if they differ one position", orig.isNeighbor(new Cell(6, 6)));
+		assertTrue("Two cells are neighbours if they differ one position", orig.isNeighbour(new Cell(4, 4)));
+		assertTrue("Two cells are neighbours if they differ one position", orig.isNeighbour(new Cell(4, 5)));
+		assertTrue("Two cells are neighbours if they differ one position", orig.isNeighbour(new Cell(4, 6)));
+		assertTrue("Two cells are neighbours if they differ one position", orig.isNeighbour(new Cell(5, 4)));
+		assertTrue("Two cells are neighbours if they differ one position", orig.isNeighbour(new Cell(5, 6)));
+		assertTrue("Two cells are neighbours if they differ one position", orig.isNeighbour(new Cell(6, 4)));
+		assertTrue("Two cells are neighbours if they differ one position", orig.isNeighbour(new Cell(6, 5)));
+		assertTrue("Two cells are neighbours if they differ one position", orig.isNeighbour(new Cell(6, 6)));
 	}
 	
 	@Test
-	void TwoCellsAreNotNeighborsIfTheyDifferMoreThanOneCoordinate() {
+	void TwoCellsAreNotNeighboursIfTheyDifferMoreThanOneCoordinate() {
 		Cell orig = new Cell(5, 5);
-		assertFalse("Two cells aren't neighbors if they differ more than one position", orig.isNeighbor(new Cell(3, 3)));
-		assertFalse("Two cells aren't neighbors if they differ more than one position", orig.isNeighbor(new Cell(3, 4)));
-		assertFalse("Two cells aren't neighbors if they differ more than one position", orig.isNeighbor(new Cell(3, 5)));
-		assertFalse("Two cells aren't neighbors if they differ more than one position", orig.isNeighbor(new Cell(7, 3)));
-		assertFalse("Two cells aren't neighbors if they differ more than one position", orig.isNeighbor(new Cell(7, 4)));
-		assertFalse("Two cells aren't neighbors if they differ more than one position", orig.isNeighbor(new Cell(7, 5)));
+		assertFalse("Two cells aren't neighbors if they differ more than one position", orig.isNeighbour(new Cell(3, 3)));
+		assertFalse("Two cells aren't neighbors if they differ more than one position", orig.isNeighbour(new Cell(3, 4)));
+		assertFalse("Two cells aren't neighbors if they differ more than one position", orig.isNeighbour(new Cell(3, 5)));
+		assertFalse("Two cells aren't neighbors if they differ more than one position", orig.isNeighbour(new Cell(7, 3)));
+		assertFalse("Two cells aren't neighbors if they differ more than one position", orig.isNeighbour(new Cell(7, 4)));
+		assertFalse("Two cells aren't neighbors if they differ more than one position", orig.isNeighbour(new Cell(7, 5)));
 	}
 	
 	@Test
 	void TwoCellsAreNotNeighborsIfTheyAreEqual() {
 		Cell orig = new Cell(5, 5);
-		assertFalse("Two cells aren't neighbors if they are equal", orig.isNeighbor(new Cell(5, 5)));
+		assertFalse("Two cells aren't neighbors if they are equal", orig.isNeighbour(new Cell(5, 5)));
 	}
 	
 	@Test

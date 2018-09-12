@@ -20,18 +20,16 @@ import base.Grid;
  */
 public class GameOfLife {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InterruptedException {
 		
-		Grid juego = new Grid(5,5);
+		Grid juego = new Grid(10, 10);
 		
-		juego.reviveCell(1, 3);
-		juego.reviveCell(2, 3);
-		juego.reviveCell(3, 3);
-		System.out.println(juego + "\n");
-		juego.nextGeneration();
-		System.out.println(juego + "\n");
-		juego.nextGeneration();
-		System.out.println(juego + "\n");
+		juego.randomInitialize(90);
+		while (true) {
+			juego.nextGeneration();
+			System.out.println(juego);
+			Thread.sleep(1000);
+		}
 	}
 
 }

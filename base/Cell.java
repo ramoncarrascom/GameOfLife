@@ -81,11 +81,11 @@ public class Cell implements Comparable<Cell> {
 	}
 	
 	/**
-	 * Calculates if the cell passed as parameter is a direct neighbor of the current cell
+	 * Calculates if the cell passed as parameter is a direct neighbour of the current cell
 	 * @param other the other cell to check
-	 * @return true is other is current cell's neighbor
+	 * @return true is other is current cell's neighbour
 	 */
-	public boolean isNeighbor(Cell other) {
+	public boolean isNeighbour(Cell other) {
 		
 		if (this.equals(other))
 			return false;
