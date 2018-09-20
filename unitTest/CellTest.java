@@ -47,10 +47,10 @@ class CellTest {
 	}
 	
 	@Test
-	void TwoCellsInSamePositionAreEqual() {
+	void TwoCellsInSamePositionWithSameStatusAreEqual() {
 		Cell a = new Cell(true, 1, 1);
-		Cell b = new Cell(false, 1, 1);
-		assertTrue("Two cells in same position are equal", a.equals(b));
+		Cell b = new Cell(true, 1, 1);
+		assertTrue("Two cells in same position with same status are equal", a.equals(b));
 	}
 	
 	@Test
@@ -61,9 +61,16 @@ class CellTest {
 	}
 	
 	@Test
-	void TwoEqualCellsReturnSameHashCode() {
+	void TwoCellsInSamePositionWithDifferentStatusAreNotEqual() {
 		Cell a = new Cell(true, 1, 1);
 		Cell b = new Cell(false, 1, 1);
+		assertFalse("Two cells in same position with different status are not equal", a.equals(b));		
+	}
+	
+	@Test
+	void TwoEqualCellsReturnSameHashCode() {
+		Cell a = new Cell(true, 1, 1);
+		Cell b = new Cell(true, 1, 1);
 		assertTrue("Two equal cells must have the same hash code", a.equals(b) && a.hashCode() == b.hashCode());
 	}
 

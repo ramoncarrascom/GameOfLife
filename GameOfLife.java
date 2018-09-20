@@ -22,13 +22,24 @@ public class GameOfLife {
 
 	public static void main(String[] args) throws InterruptedException {
 		
-		Grid juego = new Grid(10, 10);
+		boolean playing;
+		Grid game = new Grid(20, 20);
 		
-		juego.randomInitialize(90);
-		while (true) {
-			juego.nextGeneration();
-			System.out.println(juego);
-			Thread.sleep(1000);
+		game.randomInitialize(70);
+		playing = true;
+		
+		while (playing) {
+			
+			Grid current = game.clone();
+			game.nextGeneration();
+			
+			if (game.equals(current))
+				playing = false;
+			
+			if (playing) {
+				System.out.println(game);
+				Thread.sleep(1000);
+			}			
 		}
 	}
 

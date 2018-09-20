@@ -42,6 +42,8 @@ public class Grid {
 		initialize();
 	}
 	
+
+	
 	//-------------------------------- GETTERS & SETTERS
 	
 	/**
@@ -252,6 +254,49 @@ public class Grid {
 		}
 			
 		return resp.toString();
+	}
+	
+	/**
+	 * Overriden version of equals
+	 */
+	@Override
+	public boolean equals(Object other) {
+		
+		boolean distintas = false;
+		
+		if (!(other instanceof Grid)) {
+			return false;
+		}
+		
+		if (this.maxX != ((Grid)other).maxX || this.maxY != ((Grid)other).maxY) {
+			return false;
+		}
+		
+		for (int i = 1; i <= maxX; i++)
+			for (int j = 1; j <= maxY; j++)
+				if (!this.getCell(i, j).equals(((Grid)other).getCell(i, j)))
+					distintas = true;
+		
+		if (distintas)
+			return false;
+		else
+			return true;
+	}
+	
+	/**
+	 * Clones current grid to a new one
+	 */
+	public Grid clone() {		
+		Grid resp = new Grid(this.maxX, this.maxY);
+		
+		this.current.stream().forEach(x -> {
+				if (x.isAlive())
+					resp.reviveCell(x.getX(), x.getY());
+				else
+					resp.killCell(x.getX(), x.getY());
+			});
+		
+		return resp;
 	}
 	
 }

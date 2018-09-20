@@ -126,7 +126,7 @@ public class Cell implements Comparable<Cell> {
 	}
 	
 	/**
-	 * Object's equals override. Two cells are equal if they are in the same coord
+	 * Object's equals override. Two cells are equal if they are in the same coord and have the same status
 	 */
 	@Override
 	public boolean equals(Object other) {
@@ -134,7 +134,7 @@ public class Cell implements Comparable<Cell> {
 			return false;
 		}
 		
-		return (this.coordX == ((Cell)other).coordX && this.coordY == ((Cell)other).coordY);
+		return (this.coordX == ((Cell)other).coordX && this.coordY == ((Cell)other).coordY && this.alive == ((Cell)other).alive);
 	}
 	
 	/**
